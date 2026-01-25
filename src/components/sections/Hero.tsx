@@ -28,17 +28,17 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay" />
             </div>
 
-            <div className="relative z-20 flex h-full flex-col justify-end items-start pb-[40px] pl-[40px]">
+            <div className="relative z-20 mx-auto flex h-full max-w-[1440px] flex-col justify-end items-start px-6 pb-[40px]">
                 <WordFadeIn
                     words="Автомашины"
-                    className="text-5xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left"
+                    className="text-5xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left text-white"
                     delay={0}
                 />
 
                 <WordFadeIn
                     words="хамгаалалтын төгс шийдэл"
-                    className="text-5xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left mt-2"
-                    delay={0.2}
+                    className="text-5xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left mt-2 text-zinc-400"
+                    delay={0.3}
                 />
 
                 <motion.div

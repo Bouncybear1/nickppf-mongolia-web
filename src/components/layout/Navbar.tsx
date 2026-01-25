@@ -39,7 +39,7 @@ export default function Navbar() {
                 isScrolled ? "py-4" : "py-6"
             )}
         >
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+            <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6">
 
                 {/* Left Section: Box with Logo and Menu */}
                 <div className={cn(

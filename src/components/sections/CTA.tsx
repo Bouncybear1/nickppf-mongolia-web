@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { SectionSubtitle } from "../ui/SectionSubtitle";
 
 export default function CTA() {
     return (
@@ -17,7 +18,10 @@ export default function CTA() {
                 />
             </div>
 
-            <div className="relative z-20 mx-auto max-w-4xl px-6">
+            <div className="relative z-20 mx-auto max-w-4xl px-6 flex flex-col justify-center items-center">
+                <SectionSubtitle>
+                    NickPPF Mongolia
+                </SectionSubtitle>
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}

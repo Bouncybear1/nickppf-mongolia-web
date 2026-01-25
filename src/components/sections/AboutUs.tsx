@@ -32,7 +32,7 @@ const features = [
 export default function AboutUs() {
     return (
         <section className="bg-zinc-950 py-24 text-white">
-            <div className="mx-auto max-w-7xl px-6 flex flex-col gap-24">
+            <div className="mx-auto max-w-[1440px] px-6 flex flex-col gap-24">
 
                 {/* Top Section: Image + Content */}
                 <div className="flex flex-col lg:flex-row gap-16 items-stretch">

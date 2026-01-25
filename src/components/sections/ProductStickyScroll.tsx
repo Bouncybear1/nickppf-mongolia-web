@@ -100,7 +100,7 @@ export default function ProductStickyScroll() {
 
     return (
         <section className="relative w-[100vw] bg-[#0F0F0F] text-white pb-24 border-y border-[#2A2A2A]">
-            <div className="mx-auto flex max-w-7xl flex-col lg:flex-row lg:items-start">
+            <div className="mx-auto flex max-w-[1440px] flex-col lg:flex-row lg:items-start">
 
                 {/* Scrollable Left Column (Images) */}
                 <div className="w-full lg:w-1/2 px-4 py-24 lg:py-24 space-y-12">
