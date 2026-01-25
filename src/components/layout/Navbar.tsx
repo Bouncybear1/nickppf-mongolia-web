@@ -25,11 +25,11 @@ export default function Navbar() {
     });
 
     const navLinks = [
-        { name: "Home", href: "/" },
-        { name: "Products", href: "/products" },
-        { name: "Articles", href: "/articles" },
-        { name: "Services", href: "/services" },
-        { name: "About Us", href: "/about" },
+        { name: "Нүүр хуудас", href: "/" },
+        { name: "Бидний тухай", href: "/about" },
+        { name: "Бүтээгдэхүүн", href: "/products" },
+        { name: "Нийтлэл", href: "/articles" },
+        { name: "Үйлчилгээ", href: "/services" },
     ];
 
     return (
