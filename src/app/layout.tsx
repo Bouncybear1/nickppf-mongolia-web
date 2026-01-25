@@ -35,7 +35,10 @@ const ppNeueMontreal = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "NickPPF Mongolia | Premium Automotive Protection",
+  title: {
+    default: "NickPPF Mongolia - Автомашины будгийн хамгаалалтын хуулга",
+    template: "%s | NickPPF Mongolia - Автомашины будгийн хамгаалалтын хуулга"
+  },
   description: "The official distributor of NickPPF in Mongolia. Premium paint protection films and automotive detailing.",
 };
 
