@@ -15,44 +15,26 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant = "yellow", children, href, onClick, target, ...props }, ref) => {
 
         // Base Wrapper: relative for positioning the absolute arrow box
-        const wrapperStyles = "group relative inline-flex items-center justify-center";
+        const wrapperStyles = "group/button relative inline-flex items-center justify-center";
 
         // Text Box Styles
-        const textBoxBase = "relative z-20 flex items-center justify-center rounded-[8px] px-6 py-3 text-sm font-medium transition-colors duration-100 border";
+        const textBoxBase = "relative z-20 flex h-[47px] items-center justify-center rounded-[8px] px-6 text-sm font-medium transition-colors duration-100 border";
 
         // Arrow Box Styles
-        const arrowBoxBase = "absolute z-10 flex h-[47px] w-[47px] items-center justify-center rounded-full transition-all duration-300 ease-out opacity-0 -translate-x-4 group-hover:translate-x-[calc(100%-20px)] group-hover:opacity-100 border";
-        // Note: translate calculation places it to the right. 
-        // Initial: Hidden behind text box.
-        // Hover: Moves to right. We used right-0 anchor? No, let's use left anchor and translate.
-        // Better: Anchor the Arrow Box to the *right* of the element but with negative margin/translate? 
-        // Let's rely on standard absolute positioning. 
-        // Ideally, `right-0` of wrapper.
-        // Since wrapper wraps Text Box, `right-0` is the right edge of Text Box.
-        // We want it to move OUTSIDE the text box to the right.
-        // So `right-0` -> `translate-x-[100% + gap]`.
+        const arrowBoxBase = "absolute z-10 flex h-[47px] w-[47px] items-center justify-center rounded-full transition-all duration-300 ease-out opacity-0 -translate-x-4 group-hover/button:translate-x-[calc(100%-5px)] group-hover/button:opacity-100 border";
 
         const variants = {
             yellow: {
-                text: "bg-[#F4D23C] text-black border-transparent",
-                arrow: "bg-[#F4D23C] text-black border-transparent",
+                text: "bg-[#F4D23C] text-black border-transparent radius-[8px] text-[1.2rem] font-medium",
+                arrow: "bg-[#F4D23C] text-black border-transparent text-[1.2rem] font-medium",
             },
             black: {
-                text: "bg-black/10 text-white border-white",
-                arrow: "bg-black/80 text-white border-white", // Increased opacity for visibility on bg? Or match text box? "FFFFFF 0.1 opacity" for text box. Arrow box likely same?
+                text: "bg-white/10 hover:bg-white/20 text-white border-transparent rounded-[8px] text-[1.2rem] font-medium shadow-[inset_0_0_2px_rgba(255,255,255,0.4)] shadow-[inset_0_-1px_1px_rgba(0,0,0,0.25)]",
+                arrow: "bg-[#F4D23C] text-black border-[#F4D23C] text-[1.2rem] font-medium",
             },
         };
 
-        // Refined Black Variant: 
-        // User said: "F4D23C background...". "Button-black should have FFFFFF 0.1 opacity background..."
         const selectedVariant = variants[variant];
-
-        // Arrow Position Adjustment
-        // To make it come from "behind", we center it or place it within the text box area initially.
-        // We anchor it to the right side of the wrapper.
-        // group-hover:translate-x-[60%] or specific px?
-        // Let's use `right-[10px]` initially (hidden) -> `right-[-60px]` on hover?
-        // Actually, allow Flex behavior? No user said "not enlarge content". Absolute is best.
 
         const Content = (
             <>
@@ -63,11 +45,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
                 {/* Animated Arrow Box */}
                 <span className={cn(
-                    "relative right-10 z-10 flex h-[47px] w-[47px] items-center justify-center rounded-full border border-inherit shadow-lg", // base layout
+                    "absolute right-0 z-10 flex h-[47px] w-[47px] items-center justify-center rounded-full border border-inherit shadow-lg", // base layout
                     selectedVariant.arrow,
                     "transition-all duration-300 ease-out", // animation props
-                    "opacity-0 scale-50", // initial state: hidden, small
-                    "group-hover:translate-x-[120%] group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-[45deg]" // hover state: slides right, visible, full size, rotated box
+                    "opacity-0", // initial state: hidden
+                    "group-hover/button:translate-x-full group-hover/button:opacity-100 group-hover/button:rotate-[45deg]" // hover state: slides right, visible, full size, rotated box
                 )}>
                     {/* Arrow Icon - fills the box implies reasonable size */}
                     <ArrowUp className="h-6 w-6" /> {/* Icon distinct from box rotation? User said 'arrow... turns 45 deg'. Box rotating rotates arrow. */}

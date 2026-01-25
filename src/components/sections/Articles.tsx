@@ -1,80 +1,110 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { SectionSubtitle } from "@/components/ui/SectionSubtitle";
-import { ArrowRight } from "lucide-react";
-
-// Mock Data
-const articles = [
-    {
-        id: 1,
-        title: "The Evolution of Paint Protection Film",
-        excerpt: "From military applications to luxury cars, see how PPF technology has changed.",
-        date: "Oct 12, 2025",
-        image: "https://images.unsplash.com/photo-1625047509168-a7026f36de04?q=80&w=2000&auto=format&fit=crop"
-    },
-    {
-        id: 2,
-        title: "Ceramic Coating vs. PPF: Which is Right for You?",
-        excerpt: "Understanding the key differences and benefits of each protection method.",
-        date: "Nov 05, 2025",
-        image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1974&auto=format&fit=crop"
-    },
-    {
-        id: 3,
-        title: "NickPPF Expands to European Market",
-        excerpt: "We are proud to announce our new distribution centers opening in Germany and France.",
-        date: "Dec 01, 2025",
-        image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop"
-    }
-];
+import { Button } from "@/components/ui/Button";
+import { fetchDirectus, getDirectusFileUrl, fetchDirectusCount, type Article } from "@/lib/directus";
 
 export default function Articles() {
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadData() {
+            try {
+                // Fetch latest 3 articles
+                const data = await fetchDirectus('news', {
+                    limit: '3',
+                    sort: '-date_created'
+                });
+
+                // Fetch total count
+                const count = await fetchDirectusCount('news');
+                setTotalCount(count);
+
+                if (Array.isArray(data)) {
+                    setArticles(data);
+                }
+            } catch (error) {
+                console.error("Failed to load articles", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadData();
+    }, []);
+
+    // Mongolian date formatter
+    const formatDate = (dateString: string) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        return `${date.getFullYear()} оны ${date.getMonth() + 1} сарын ${date.getDate()}`;
+    };
+
     return (
         <section className="bg-zinc-950 py-24 text-white">
             <div className="mx-auto max-w-7xl px-6">
                 <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                     <div>
-                        <SectionSubtitle>News & Updates</SectionSubtitle>
-                        <h2 className="mt-2 text-3xl font-bold md:text-5xl">Latest Articles</h2>
+                        <SectionSubtitle>Нийтлэл</SectionSubtitle>
+                        <h2 className="mt-2 text-3xl font-medium md:text-5xl">Мэдээ, мэдээлэл</h2>
                     </div>
-                    <Link href="/articles" className="group flex items-center gap-2 text-sm font-medium text-white hover:text-zinc-300">
-                        View All News <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
+                    <Button href="/articles" variant="black" className="px-6 py-2 text-[1.2rem]">
+                        Бүх нийтлэл унших ({totalCount})
+                    </Button>
                 </div>
 
                 <div className="grid gap-8 md:grid-cols-3">
-                    {articles.map((article, index) => (
-                        <motion.div
-                            key={article.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className="group flex flex-col overflow-hidden rounded-xl bg-zinc-900"
-                        >
-                            <div className="relative aspect-video w-full overflow-hidden">
-                                <img
-                                    src={article.image}
-                                    alt={article.title}
-                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-                            </div>
-                            <div className="flex flex-1 flex-col p-6">
-                                <span className="mb-3 text-xs text-zinc-500">{article.date}</span>
-                                <h3 className="mb-3 text-xl font-bold leading-tight group-hover:text-zinc-300 transition-colors">
-                                    {article.title}
-                                </h3>
-                                <p className="flex-1 text-sm text-zinc-400">
-                                    {article.excerpt}
-                                </p>
-                                <Link href={`/articles/${article.id}`} className="mt-6 flex items-center gap-2 text-sm font-medium text-white hover:underline">
-                                    Read More <ArrowRight className="h-3 w-3" />
-                                </Link>
-                            </div>
-                        </motion.div>
-                    ))}
+                    {loading ? (
+                        // Simple loading skeleton or text
+                        <div className="col-span-3 text-center text-zinc-500 py-12">
+                            Мэдээг татаж байна...
+                        </div>
+                    ) : articles.length === 0 ? (
+                        <div className="col-span-3 text-center text-zinc-500 py-12">
+                            Мэдээ байхгүй байна.
+                        </div>
+                    ) : (
+                        articles.map((article, index) => (
+                            <motion.div
+                                key={article.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="group flex flex-col overflow-hidden rounded-[8px] bg-[#121212] p-[8px]"
+                            >
+                                <div className="relative h-[270px] overflow-hidden">
+                                    {/* Safety check for image */}
+                                    {article.Featured_image ? (
+                                        <img
+                                            src={getDirectusFileUrl(article.Featured_image)}
+                                            alt={article.title}
+                                            className="h-[270px] g-[10px] rounded-[8px] w-full object-cover transition-transform duration-500"
+                                        />
+                                    ) : (
+                                        <div className="h-full w-full bg-[#121212] flex items-center justify-center text-zinc-600">
+                                            No Image
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex flex-1 flex-col p-6">
+                                    <SectionSubtitle>{formatDate(article.date_created)}</SectionSubtitle>
+                                    <h3 className="mb-3 font-medium leading-tight group-hover:text-zinc-300 transition-colors text-[1.6rem] line-clamp-2">
+                                        {article.title}
+                                    </h3>
+                                    <div className="mt-6">
+                                        <Button href={`/articles/${article.slug}`} variant="black" className="w-fit text-[1.2rem]">
+                                            Цааш унших
+                                        </Button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))
+                    )}
                 </div>
             </div>
         </section>

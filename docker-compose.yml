@@ -1,0 +1,58 @@
+version: '3'
+services:
+  directus:
+    image: directus/directus:latest
+    ports:
+      - 8055:8055
+    volumes:
+      - ./directus/uploads:/directus/uploads
+      - ./directus/extensions:/directus/extensions
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+
+      # Database Connection
+      DB_CLIENT: ${DB_CLIENT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      # Cache
+      CACHE_ENABLED: ${CACHE_ENABLED}
+      CACHE_STORE: ${CACHE_STORE}
+      REDIS: ${REDIS_URL}
+
+      # CORS
+      CORS_ENABLED: 'true'
+      CORS_ORIGIN: 'true'
+      CORS_METHODS: 'GET,POST,PATCH,DELETE'
+      CORS_HEADERS: 'Content-Type,Authorization'
+
+      WEBSOCKETS_ENABLED: 'true'
+    env_file:
+      - .env
+    restart: always
+
+  postgres:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    restart: always
+
+  redis:
+    image: redis:6
+    restart: always
+
+volumes:
+  postgres_data:

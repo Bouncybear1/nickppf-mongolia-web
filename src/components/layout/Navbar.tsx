@@ -5,20 +5,24 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils"; // Assumes utils exists or we need to create it for clsx
 import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 
 export default function Navbar() {
+    const { scrollY } = useScroll();
+    const [isHidden, setIsHidden] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        const previous = scrollY.getPrevious() ?? 0;
+        if (latest > previous && latest > 50) {
+            setIsHidden(true); // Scrolling down
+        } else {
+            setIsHidden(false); // Scrolling up
+        }
+        setIsScrolled(latest > 50);
+    });
 
     const navLinks = [
         { name: "Home", href: "/" },
@@ -39,24 +43,38 @@ export default function Navbar() {
 
                 {/* Left Section: Box with Logo and Menu */}
                 <div className={cn(
-                    "flex items-center gap-6 rounded-s px-6 py-3 transition-all",
+                    "flex items-center gap-6 rounded-[6px] px-6 py-3 transition-all",
                     "bg-zinc-900/80 backdrop-blur-md border border-white/10 shadow-lg"
                 )}>
                     {/* Logo */}
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2 overflow-hidden">
                         <Image
                             src="/icon.svg"
                             alt="NickPPF Icon"
                             width={32}
                             height={32}
+                            className=" z-20 relative"
                         />
-                        <Image
-                            src="/logo.svg"
-                            alt="NickPPF Logo"
-                            width={80}
-                            height={24}
-                        />
+                        <motion.div
+                            initial={{ x: 0, opacity: 1, width: "auto" }}
+                            animate={{
+                                x: isHidden ? -50 : 0,
+                                opacity: isHidden ? 0 : 1,
+                                width: isHidden ? 0 : "auto",
+                                marginLeft: isHidden ? 0 : 8 // managed margin
+                            }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="flex items-center overflow-hidden"
+                            style={{ marginLeft: 8 }} // Default margin
+                        >
+                            <Image
+                                src="/logo.svg"
+                                alt="NickPPF Logo"
+                                width={80}
+                                height={24}
+                                className="shrink-0"
+                            />
+                        </motion.div>
                     </Link>
 
                     {/* Divider */}
@@ -126,10 +144,10 @@ export default function Navbar() {
                                 </Link>
                             ))}
                             <div className="mt-8 flex flex-col gap-4">
-                                <Button variant="black" className="w-full py-4 text-lg font-medium">
+                                <Button className="w-full py-4 text-lg font-medium">
                                     Register
                                 </Button>
-                                <Button variant="yellow" className="w-full py-4 text-lg font-bold">
+                                <Button className="w-full py-4 text-lg font-bold">
                                     Login
                                 </Button>
                             </div>

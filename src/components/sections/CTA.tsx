@@ -22,19 +22,10 @@ export default function CTA() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-4xl font-bold md:text-6xl"
+                    className="w-full text-4xl font-medium md:text-6xl"
                 >
-                    Ready to protect your investment?
+                    Мэргэжлийн багтай холбогдож, зөв шийдлээ тодорхойлоорой
                 </motion.h2>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                    className="mx-auto mt-6 max-w-2xl text-lg text-zinc-300"
-                >
-                    Connect with our professional team for a personalized consultation and quotaion.
-                </motion.p>
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -45,7 +36,7 @@ export default function CTA() {
                     <Button
                         href="/consultation"
                         variant="yellow"
-                        className="text-lg px-8 py-4 font-bold"
+                        className="text-lg px-8 py-4 font-medium"
                     >
                         Зөвлөгөө авах
                     </Button>
