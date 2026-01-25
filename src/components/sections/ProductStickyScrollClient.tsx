@@ -28,7 +28,7 @@ export function ProductStickyScrollClient({ items }: ProductStickyScrollClientPr
     }
 
     return (
-        <section className="relative w-[100vw] bg-[#0F0F0F] text-white pb-24 border-y border-[#2A2A2A]">
+        <section className="relative w-full bg-[#0F0F0F] text-white pb-24 border-y border-[#2A2A2A]">
             <div className="mx-auto flex max-w-[1440px] flex-col lg:flex-row lg:items-start">
 
                 {/* Scrollable Left Column (Images) */}
