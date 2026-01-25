@@ -8,9 +8,25 @@ interface Category {
     slug: string;
 }
 
+interface SubCategory {
+    id: number;
+    title: string;
+    slug: string;
+    category_id: number;
+}
+
+interface Product {
+    id: number;
+    Title: string;
+    slug: string;
+    subcategory_id: number;
+}
+
 export default async function Footer() {
-    // Fetch categories and latest 3 articles
+    // Fetch categories, subcategories, products, and latest 3 articles
     let categories: Category[] = [];
+    let subCategories: SubCategory[] = [];
+    let products: Product[] = [];
     let latestArticles: Article[] = [];
 
     try {
@@ -18,7 +34,33 @@ export default async function Footer() {
         if (Array.isArray(categoriesData)) {
             categories = categoriesData;
         }
+    } catch (error) {
+        console.error("Failed to load categories", error);
+    }
 
+    try {
+        // Fetch Subcategories collection
+        const subCategoriesData = await fetchDirectus('Subcategories');
+        if (Array.isArray(subCategoriesData)) {
+            subCategories = subCategoriesData;
+        }
+    } catch (error) {
+        console.error("Failed to load subcategories", error);
+    }
+
+    try {
+        // Fetch Products collection
+        const productsData = await fetchDirectus('Products', {
+            fields: 'id,Title,slug,subcategory_id'
+        });
+        if (Array.isArray(productsData)) {
+            products = productsData;
+        }
+    } catch (error) {
+        console.error("Failed to load products", error);
+    }
+
+    try {
         const articlesData = await fetchDirectus('news', {
             limit: '3',
             sort: '-date_created',
@@ -28,49 +70,79 @@ export default async function Footer() {
             latestArticles = articlesData;
         }
     } catch (error) {
-        console.error("Failed to load footer data", error);
+        console.error("Failed to load articles", error);
     }
 
+    // Group subcategories by category
+    const categoriesWithSubcategories = categories.map(category => ({
+        ...category,
+        subcategories: subCategories
+            .filter(sub => sub.category_id === category.id)
+            .map(sub => ({
+                ...sub,
+                products: products.filter(prod =>
+                    prod.subcategory_id === sub.id &&
+                    prod.Title !== sub.title // Exclude if product title matches subcategory title
+                )
+            }))
+    }));
+
     return (
-        <footer className="bg-[#030404] text-white border-t border-zinc-900">
+        <footer className="bg-[#030404] text-white">
             {/* Top Section */}
             <div className="mx-auto max-w-[1440px] px-6 py-16">
-                <div className="grid grid-cols-1 gap-12 md:grid-cols-4 lg:grid-cols-5">
+                <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5">
 
-                    {/* Product Categories */}
-                    {categories.map((category) => (
-                        <div key={category.id}>
-                            <h4 className="mb-6 text-sm font-bold uppercase tracking-wider text-white">
-                                {category.Title}
-                            </h4>
-                            <ul className="space-y-4">
-                                <li>
-                                    <Link
-                                        href={`/products/${category.slug}`}
-                                        className="text-zinc-400 hover:text-white transition-colors text-sm"
-                                    >
-                                        Дэлгэрэнгүй үзэх
-                                    </Link>
-                                </li>
-                            </ul>
+                    {/* Products Section */}
+                    <div className="lg:col-span-3">
+                        <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-8">
+                            Бүтээгдэхүүн
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {categoriesWithSubcategories.map((category) => (
+                                <div key={category.id}>
+                                    {/* Category is not shown, just used for structure */}
+                                    <div className="space-y-4">
+                                        {category.subcategories.map((subCategory) => (
+                                            <div key={subCategory.id}>
+                                                <h4 className="mb-3 text-m font-medium text-white/80">
+                                                    {subCategory.title}
+                                                </h4>
+                                                <ul className="space-y-2 mb-4">
+                                                    {subCategory.products.map((product) => (
+                                                        <li key={product.id}>
+                                                            <Link
+                                                                href={`/products/${product.slug}`}
+                                                                className="text-white/40 hover:text-white transition-colors text-m font-medium"
+                                                            >
+                                                                {product.Title}
+                                                            </Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
 
-                    {/* Articles and Details */}
-                    <div className="md:col-span-2">
-                        <h4 className="mb-6 text-sm font-bold uppercase tracking-wider text-white">
-                            Нийтлэл ба холбоо барих
-                        </h4>
+                    {/* Articles and Details Section */}
+                    <div className="lg:col-span-2">
+                        <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-2">
+                            Нийтлэл
+                        </h3>
 
                         {/* Latest Articles */}
                         <div className="mb-6">
-                            <h5 className="text-xs font-semibold text-zinc-500 mb-3 uppercase">Сүүлийн мэдээ</h5>
+
                             <ul className="space-y-3">
                                 {latestArticles.map((article) => (
                                     <li key={article.id}>
                                         <Link
                                             href={`/articles/${article.slug}`}
-                                            className="text-zinc-400 hover:text-white transition-colors text-sm line-clamp-1"
+                                            className="text-white/80 font-medium hover:text-white transition-colors text-sm line-clamp-1"
                                         >
                                             {article.title}
                                         </Link>
@@ -80,28 +152,39 @@ export default async function Footer() {
                         </div>
 
                         {/* Contact Info */}
-                        <div className="space-y-3 text-sm text-zinc-400">
+                        <div className="space-y-3 text-xs text-white/80">
                             <div>
-                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Үйлчилгээ</h5>
-                                <Link href="/services" className="hover:text-white transition-colors">
+                                <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-2">
+                                    Үйлчилгээ
+                                </h3>
+                                <Link href="/services" className="text-white/80 text-s font-medium hover:text-white transition-colors">
                                     Үйлчилгээний мэдээлэл
                                 </Link>
                             </div>
 
                             <div>
-                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Хаяг</h5>
-                                <address className="not-italic">
-                                    Улаанбаатар хот, Монгол Улс
+                                <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-2">
+                                    Хаяг
+                                </h3>
+                                <address className="text-white/80 font-medium not-italic">
+                                    СХД-н 13-р хороо, Өнөр төв 2 давхар NICKPPFMongolia
                                 </address>
                             </div>
 
                             <div>
-                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Холбогдох</h5>
-                                <p>+976 9911-2345</p>
+                                <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-2">
+                                    Холбогдох
+                                </h3>
+                                <h5 className="text-white/80 font-medium" >Холбогдох утас:</h5>
+                                <p className="text-[#F4D23C] font-medium" >+976 9990 0993</p>
+                                <h5 className="text-white/80 font-medium" >Имэйл хаяг:</h5>
+                                <p className="text-[#F4D23C] font-medium" >info@nickppfmongolia.mn</p>
                             </div>
 
                             <div>
-                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Цахим хаяг</h5>
+                                <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-2">
+                                    Цахим хаяг
+                                </h3>
                                 <div className="flex items-center gap-4 mt-3">
                                     <a
                                         href="https://instagram.com"
@@ -137,7 +220,7 @@ export default async function Footer() {
             </div>
 
             {/* Bottom Section */}
-            <div className="border-t border-zinc-900">
+            <div className="bg-black">
                 <div className="mx-auto max-w-[1440px] px-6 py-6">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         {/* Left: Official Logo */}
@@ -150,9 +233,9 @@ export default async function Footer() {
                         </div>
 
                         {/* Right: Terms & Copyright */}
-                        <div className="flex items-center gap-4 text-sm text-zinc-500">
+                        <div className="flex items-center gap-4 text-sm text-[#B3B3B3] font-mono font-medium uppercase">
                             <Link href="/terms" className="hover:text-white transition-colors">
-                                Үйлчилгээний нөхцөл
+                                ҮЙЛЧИЛГЭЭНИЙ НӨХЦӨЛ
                             </Link>
                             <span>•</span>
                             <p>"ЭЙ ЭН ЖЭЙ ТВИНС"-ХХК БҮХ ЭРХ ХУУЛИАР ХАМГААЛАГДСАН</p>
