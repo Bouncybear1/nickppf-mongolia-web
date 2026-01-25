@@ -26,7 +26,7 @@ export default async function Articles() {
     }
 
     return (
-        <section className="bg-zinc-950 py-24 text-white">
+        <section className="bg-[#030404] py-24 text-white">
             <div className="mx-auto max-w-[1440px] px-6">
                 <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                     <div>

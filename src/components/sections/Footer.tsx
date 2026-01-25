@@ -1,59 +1,163 @@
 import Link from "next/link";
+import { fetchDirectus, type Article } from "@/lib/directus";
+import { Instagram, Facebook } from "lucide-react";
 
-export default function Footer() {
+interface Category {
+    id: number;
+    Title: string;
+    slug: string;
+}
+
+export default async function Footer() {
+    // Fetch categories and latest 3 articles
+    let categories: Category[] = [];
+    let latestArticles: Article[] = [];
+
+    try {
+        const categoriesData = await fetchDirectus('Categories');
+        if (Array.isArray(categoriesData)) {
+            categories = categoriesData;
+        }
+
+        const articlesData = await fetchDirectus('news', {
+            limit: '3',
+            sort: '-date_created',
+            fields: 'id,title,slug'
+        });
+        if (Array.isArray(articlesData)) {
+            latestArticles = articlesData;
+        }
+    } catch (error) {
+        console.error("Failed to load footer data", error);
+    }
+
     return (
-        <footer className="bg-black py-16 text-zinc-400 border-t border-zinc-900">
-            <div className="mx-auto max-w-7xl px-6">
-                <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <footer className="bg-[#030404] text-white border-t border-zinc-900">
+            {/* Top Section */}
+            <div className="mx-auto max-w-[1440px] px-6 py-16">
+                <div className="grid grid-cols-1 gap-12 md:grid-cols-4 lg:grid-cols-5">
 
-                    {/* Brand & Address */}
-                    <div>
-                        <Link href="/" className="mb-6 block text-2xl font-bold text-white">
-                            NICHPPF <span className="text-red-600">.</span>
-                        </Link>
-                        <address className="not-italic">
-                            <p className="mb-2">123 Automotive Blvd,</p>
-                            <p className="mb-2">Ulaanbaatar, Mongolia</p>
-                            <p className="mb-2">+976 9911-2345</p>
-                            <p>contact@nickppf.mn</p>
-                        </address>
-                    </div>
+                    {/* Product Categories */}
+                    {categories.map((category) => (
+                        <div key={category.id}>
+                            <h4 className="mb-6 text-sm font-bold uppercase tracking-wider text-white">
+                                {category.Title}
+                            </h4>
+                            <ul className="space-y-4">
+                                <li>
+                                    <Link
+                                        href={`/products/${category.slug}`}
+                                        className="text-zinc-400 hover:text-white transition-colors text-sm"
+                                    >
+                                        Дэлгэрэнгүй үзэх
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    ))}
 
-                    {/* Products */}
-                    <div>
-                        <h4 className="mb-6 text-sm font-bold uppercase tracking-wider text-white">Products</h4>
-                        <ul className="space-y-4">
-                            <li><Link href="#" className="hover:text-white transition-colors">Paint Protection Film</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Window Films</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Vinyl Wraps</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Ceramic Coating</Link></li>
-                        </ul>
-                    </div>
+                    {/* Articles and Details */}
+                    <div className="md:col-span-2">
+                        <h4 className="mb-6 text-sm font-bold uppercase tracking-wider text-white">
+                            Нийтлэл ба холбоо барих
+                        </h4>
 
-                    {/* Services/Company */}
-                    <div>
-                        <h4 className="mb-6 text-sm font-bold uppercase tracking-wider text-white">Company</h4>
-                        <ul className="space-y-4">
-                            <li><Link href="#" className="hover:text-white transition-colors">About Us</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Services</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Installers</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Contact</Link></li>
-                        </ul>
-                    </div>
+                        {/* Latest Articles */}
+                        <div className="mb-6">
+                            <h5 className="text-xs font-semibold text-zinc-500 mb-3 uppercase">Сүүлийн мэдээ</h5>
+                            <ul className="space-y-3">
+                                {latestArticles.map((article) => (
+                                    <li key={article.id}>
+                                        <Link
+                                            href={`/articles/${article.slug}`}
+                                            className="text-zinc-400 hover:text-white transition-colors text-sm line-clamp-1"
+                                        >
+                                            {article.title}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
 
-                    {/* Legal */}
-                    <div>
-                        <h4 className="mb-6 text-sm font-bold uppercase tracking-wider text-white">Legal</h4>
-                        <ul className="space-y-4">
-                            <li><Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Warranty Info</Link></li>
-                        </ul>
+                        {/* Contact Info */}
+                        <div className="space-y-3 text-sm text-zinc-400">
+                            <div>
+                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Үйлчилгээ</h5>
+                                <Link href="/services" className="hover:text-white transition-colors">
+                                    Үйлчилгээний мэдээлэл
+                                </Link>
+                            </div>
+
+                            <div>
+                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Хаяг</h5>
+                                <address className="not-italic">
+                                    Улаанбаатар хот, Монгол Улс
+                                </address>
+                            </div>
+
+                            <div>
+                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Холбогдох</h5>
+                                <p>+976 9911-2345</p>
+                            </div>
+
+                            <div>
+                                <h5 className="text-xs font-semibold text-zinc-500 mb-2 uppercase">Цахим хаяг</h5>
+                                <div className="flex items-center gap-4 mt-3">
+                                    <a
+                                        href="https://instagram.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:opacity-80 transition-opacity"
+                                        aria-label="Instagram"
+                                    >
+                                        <Instagram
+                                            size={24}
+                                            strokeWidth={1.25}
+                                            className="text-[#F4D23C]"
+                                        />
+                                    </a>
+                                    <a
+                                        href="https://facebook.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:opacity-80 transition-opacity"
+                                        aria-label="Facebook"
+                                    >
+                                        <Facebook
+                                            size={24}
+                                            strokeWidth={1.25}
+                                            className="text-[#F4D23C]"
+                                        />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div className="mt-16 border-t border-zinc-900 pt-8 text-center text-sm">
-                    <p>&copy; {new Date().getFullYear()} NickPPF Mongolia. All rights reserved.</p>
+            {/* Bottom Section */}
+            <div className="border-t border-zinc-900">
+                <div className="mx-auto max-w-[1440px] px-6 py-6">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                        {/* Left: Official Logo */}
+                        <div className="flex items-center gap-4">
+                            <img
+                                src="/official-authorized-dealer.png"
+                                alt="Official Authorized Dealer"
+                                className="h-16 w-16"
+                            />
+                        </div>
+
+                        {/* Right: Terms & Copyright */}
+                        <div className="flex items-center gap-4 text-sm text-zinc-500">
+                            <Link href="/terms" className="hover:text-white transition-colors">
+                                Үйлчилгээний нөхцөл
+                            </Link>
+                            <span>•</span>
+                            <p>"ЭЙ ЭН ЖЭЙ ТВИНС"-ХХК БҮХ ЭРХ ХУУЛИАР ХАМГААЛАГДСАН</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>
