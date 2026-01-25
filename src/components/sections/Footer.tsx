@@ -157,7 +157,7 @@ export default async function Footer() {
                                 <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-2">
                                     Үйлчилгээ
                                 </h3>
-                                <Link href="/services" className="text-white/80 text-s font-medium hover:text-white transition-colors">
+                                <Link href="/services" className="text-white/80 text-sm font-medium hover:text-white transition-colors">
                                     Үйлчилгээний мэдээлэл
                                 </Link>
                             </div>
@@ -175,10 +175,10 @@ export default async function Footer() {
                                 <h3 className="text-xs font-mono font-medium text-white/72 uppercase tracking-wide mb-2">
                                     Холбогдох
                                 </h3>
-                                <h5 className="text-white/80 font-medium" >Холбогдох утас:</h5>
-                                <p className="text-[#F4D23C] font-medium" >+976 9990 0993</p>
-                                <h5 className="text-white/80 font-medium" >Имэйл хаяг:</h5>
-                                <p className="text-[#F4D23C] font-medium" >info@nickppfmongolia.mn</p>
+                                <h5 className="text-white/80 font-medium text-sm" >Холбогдох утас:</h5>
+                                <p className="text-[#F4D23C] font-medium text-sm" >+976 9990 0993</p>
+                                <h5 className="text-white/80 font-medium text-sm" >Имэйл хаяг:</h5>
+                                <p className="text-[#F4D23C] font-medium text-sm" >info@nickppfmongolia.mn</p>
                             </div>
 
                             <div>

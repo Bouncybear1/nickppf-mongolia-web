@@ -10,10 +10,12 @@ import { WordFadeIn } from "../ui/WordFadeIn";
 export default function Hero() {
     return (
         <section className="relative h-screen w-full overflow-hidden bg-zinc-950 text-white">
-            {/* Background Video Placeholder */}
+            {/* Background Video */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-black/60 z-10" />
-                {/* Replace src with actual video or use an Image component */}
+                {/* Gradient Overlay - Black at bottom fading to transparent at top */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
+
+                {/* Video Element */}
                 <video
                     autoPlay
                     loop
@@ -22,10 +24,8 @@ export default function Hero() {
                     className="h-full w-full object-cover"
                     poster="/hero-poster.jpg"
                 >
-                    {/* <source src="/hero-video.mp4" type="video/mp4" /> */}
+                    <source src="/amblpk5xet4w.webm" type="video/webm" />
                 </video>
-                {/* Fallback pattern if no video */}
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay" />
             </div>
 
             <div className="relative z-20 mx-auto flex h-full max-w-[1440px] flex-col justify-end items-start px-6 pb-[40px]">
