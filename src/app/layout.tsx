@@ -16,17 +16,17 @@ const jetbrainsMono = JetBrains_Mono({
 const ppNeueMontreal = localFont({
   src: [
     {
-      path: "../../public/fonts/PPNeueMontreal-Medium.woff",
+      path: "../../public/fonts/ppneuemontreal-medium.woff",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../../public/fonts/PPNeueMontreal-Bold.woff",
+      path: "../../public/fonts/ppneuemontreal-bold.woff",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../../public/fonts/PPNeueMontreal-Book.woff",
+      path: "../../public/fonts/ppneuemontreal-book.woff",
       weight: "400",
       style: "normal",
     }
