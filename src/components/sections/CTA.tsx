@@ -7,7 +7,7 @@ import { SectionSubtitle } from "../ui/SectionSubtitle";
 
 export default function CTA() {
     return (
-        <section className="relative overflow-hidden py-32 text-center text-white">
+        <section className="relative overflow-hidden py-20 md:py-32 text-center text-white">
             {/* Background with overlay */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-black/80 z-10" />
@@ -26,7 +26,7 @@ export default function CTA() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="w-full text-4xl font-medium md:text-6xl"
+                    className="w-full text-3xl font-medium md:text-6xl"
                 >
                     Мэргэжлийн багтай холбогдож, зөв шийдлээ тодорхойлоорой
                 </motion.h2>

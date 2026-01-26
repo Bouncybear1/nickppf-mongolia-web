@@ -28,28 +28,54 @@ export function ProductStickyScrollClient({ items }: ProductStickyScrollClientPr
     }
 
     return (
-        <section className="relative w-full bg-[#0F0F0F] text-white pb-24 border-y border-[#2A2A2A]">
-            <div className="mx-auto flex max-w-[1440px] flex-col lg:flex-row lg:items-start">
+        <section className="relative w-full bg-[#0F0F0F] text-white pb-12 lg:pb-24 border-y border-[#2A2A2A] overflow-visible">
+            {/* Header - Mobile Only */}
+            <div className="md:hidden mx-auto max-w-[1440px] px-6 pt-24 pb-12">
+                <div>
+                    <SectionSubtitle>
+                        БҮТЭЭГДЭХҮҮН,ҮЙЛЧИЛГЭЭ
+                    </SectionSubtitle>
+                    <WordFadeIn
+                        words="NICK-ийн бүтээгдэхүүнүүд"
+                        className="mb-6 text-3xl font-medium leading-tight text-white"
+                        delay={0.1}
+                    />
+                    <WordFadeIn
+                        words="Бодит хэрэглээнд тулгуурлан тасралтгүй шинэчилж, хөгжүүлсээр ирсэн. Бүтээгдэхүүн бүрийг 10 гаруй жилийн турш гадаа орчинд туршсан. Хийсэн шинэчлэл бүр танд өгч буй бидний амлалт юм."
+                        className="text-lg text-zinc-400 max-w-md"
+                        delay={0.05}
+                    />
+                    <div className="mt-8 w-full">
+                        <Button
+                            href="/contact"
+                            className="w-fit font-medium" variant="yellow">
+                            Үйлчилгээ авах
+                        </Button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mx-auto flex max-w-[1440px] flex-col md:flex-row md:items-start">
 
                 {/* Scrollable Left Column (Images) */}
-                <div className="w-full lg:w-1/2 px-4 py-24 lg:py-24 space-y-12">
+                <div className="w-full md:w-1/2 px-4 space-y-12 py-24">
                     {items.map((product) => (
                         <ProductImage key={product.id} product={product} setActiveId={setActiveId} />
                     ))}
-                    <div className="h-24 lg:hidden" /> {/* Spacer for mobile */}
+                    <div className="h-24 md:hidden" /> {/* Spacer for mobile */}
                 </div>
 
                 {/* Sticky Right Column (Content & ToC) */}
-                <div className="hidden lg:flex w-1/2 flex-col justify-center p-16 sticky top-0 h-screen self-start">
+                <div className="hidden md:flex w-1/2 flex-col justify-center p-8 lg:p-16 sticky top-0 h-screen self-start pt-0">
 
-                    {/* Header */}
-                    <div className="mb-12">
+                    {/* Header - Desktop Only (Above ToC) */}
+                    <div className="mb-12 pt-24">
                         <SectionSubtitle>
                             БҮТЭЭГДЭХҮҮН,ҮЙЛЧИЛГЭЭ
                         </SectionSubtitle>
                         <WordFadeIn
                             words="NICK-ийн бүтээгдэхүүнүүд"
-                            className="mb-6 text-4xl font-medium leading-tight md:text-5xl text-white"
+                            className="mb-6 text-5xl font-medium leading-tight text-white"
                             delay={0.1}
                         />
                         <WordFadeIn
@@ -60,7 +86,7 @@ export function ProductStickyScrollClient({ items }: ProductStickyScrollClientPr
                     </div>
 
                     {/* Table of Contents */}
-                    <div className="flex flex-col w-full max-w-md divide-y divide-[#B3B3B3]/20">
+                    <div className="hidden md:flex flex-col w-full max-w-md divide-y divide-[#B3B3B3]/20">
                         {items.map((product) => (
                             <button
                                 key={product.id}
@@ -98,15 +124,7 @@ export function ProductStickyScrollClient({ items }: ProductStickyScrollClientPr
                 </div>
             </div>
 
-            {/* Mobile Fixed Content (Simpler version) */}
-            <div className="fixed bottom-0 left-0 w-full bg-zinc-900 border-t border-white/10 p-4 lg:hidden z-40">
-                <p className="text-[#F6BE00] text-xs font-bold uppercase mb-1">
-                    {items.find(p => p.id === activeId)?.label}
-                </p>
-                <p className="text-sm font-medium text-white line-clamp-1">
-                    {items.find(p => p.id === activeId)?.title}
-                </p>
-            </div>
+            {/* Mobile Fixed Content Removed as per request */}
         </section>
     );
 }
@@ -122,7 +140,7 @@ function ProductImage({ product, setActiveId }: { product: ProductItem, setActiv
     }, [isInView, product.id, setActiveId]);
 
     return (
-        <div id={`product-${product.id}`} ref={ref} className="group lg:relative w-full aspect-[16/9] overflow-hidden rounded-2xl bg-zinc-800 scroll-mt-32">
+        <div id={`product-${product.id}`} ref={ref} className="group relative w-full aspect-[16/9] overflow-hidden rounded-2xl bg-zinc-800 scroll-mt-32">
             {product.image ? (
                 <img
                     src={getDirectusFileUrl(product.image)}
@@ -135,7 +153,7 @@ function ProductImage({ product, setActiveId }: { product: ProductItem, setActiv
 
             <div className="absolute inset-0 bg-black/20" />
 
-            {/* Mobile Overlay Text */}
+            {/* Mobile Overlay Text - Visible on ALL devices as requested */}
             <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent">
                 {/* Decorative Box (Rotated) */}
                 <div className={cn(

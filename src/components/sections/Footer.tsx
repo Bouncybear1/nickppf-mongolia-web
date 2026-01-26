@@ -105,7 +105,7 @@ export default async function Footer() {
                                     <div className="space-y-4">
                                         {category.subcategories.map((subCategory) => (
                                             <div key={subCategory.id}>
-                                                <h4 className="mb-3 text-m font-medium text-white/80">
+                                                <h4 className="mb-3 text-sm font-medium text-white/80">
                                                     {subCategory.title}
                                                 </h4>
                                                 <ul className="space-y-2 mb-4">
@@ -113,7 +113,7 @@ export default async function Footer() {
                                                         <li key={product.id}>
                                                             <Link
                                                                 href={`/products/${product.slug}`}
-                                                                className="text-white/40 hover:text-white transition-colors text-m font-medium"
+                                                                className="text-white/40 hover:text-white transition-colors text-sm font-medium"
                                                             >
                                                                 {product.Title}
                                                             </Link>

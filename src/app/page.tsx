@@ -6,7 +6,7 @@ import CTA from "@/components/sections/CTA";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Нүүр хуудас",
+  title: "Нүүр хуудас | NickPPF Mongolia - Автомашины будгийн хамгаалалтын хуулга",
 };
 
 export default function Home() {

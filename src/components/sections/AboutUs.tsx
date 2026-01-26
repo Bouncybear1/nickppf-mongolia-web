@@ -32,10 +32,10 @@ const features = [
 export default function AboutUs() {
     return (
         <section className="bg-zinc-950 py-24 text-white">
-            <div className="mx-auto max-w-[1440px] px-6 flex flex-col gap-24">
+            <div className="mx-auto max-w-[1440px] px-6 flex flex-col gap-12 md:gap-24">
 
                 {/* Top Section: Image + Content */}
-                <div className="flex flex-col lg:flex-row gap-16 items-stretch">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-stretch">
 
                     {/* Left: Image */}
                     <motion.div
@@ -43,7 +43,7 @@ export default function AboutUs() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="relative w-[50%] lg:w-[1fr] min-h-[436px] lg:min-h-full shrink-0 overflow-hidden rounded-[8px] border border-white/10"
+                        className="relative w-full lg:w-1/2 min-h-[436px] lg:min-h-full shrink-0 overflow-hidden rounded-[8px] border border-white/10"
                     >
                         <img
                             src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070&auto=format&fit=crop"

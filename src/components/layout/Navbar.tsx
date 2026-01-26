@@ -36,7 +36,7 @@ export default function Navbar() {
         <header
             className={cn(
                 "fixed top-0 z-50 w-full transition-all duration-300",
-                isScrolled ? "py-4" : "py-6"
+                isScrolled ? "py-4" : "py-4 md:py-6"
             )}
         >
             <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6">
@@ -78,10 +78,10 @@ export default function Navbar() {
                     </Link>
 
                     {/* Divider */}
-                    <div className="h-6 w-px bg-white/20 hidden md:block" />
+                    <div className="h-6 w-px bg-white/20 hidden lg:block" />
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-1 rounded-xs">
+                    <nav className="hidden lg:flex items-center gap-1 rounded-xs">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
@@ -96,12 +96,12 @@ export default function Navbar() {
 
                 {/* Right Section: Auth Buttons */}
                 <div className="flex items-center gap-3">
-                    <div className="hidden md:inline-block">
+                    <div className="hidden lg:inline-block">
                         <Button variant="black" className="px-6 py-2.5 text-sm font-medium">
                             Register
                         </Button>
                     </div>
-                    <div className="hidden md:inline-block">
+                    <div className="hidden lg:inline-block">
                         <Button variant="yellow" className="px-6 py-2.5 text-sm font-bold">
                             Login
                         </Button>
@@ -109,7 +109,7 @@ export default function Navbar() {
 
                     {/* Mobile Toggle */}
                     <button
-                        className="rounded-full bg-zinc-900/80 p-3 text-white backdrop-blur-md md:hidden border border-white/10"
+                        className="rounded-[8px] bg-zinc-900/80 p-3 text-white backdrop-blur-md lg:hidden border border-white/10"
                         onClick={() => setMobileMenuOpen(true)}
                     >
                         <Menu className="h-6 w-6" />
@@ -124,7 +124,7 @@ export default function Navbar() {
                         initial={{ opacity: 0, x: "100%" }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
-                        className="fixed inset-0 z-[60] bg-zinc-950 p-6 md:hidden"
+                        className="fixed inset-0 z-[60] bg-zinc-950 p-6 lg:hidden"
                     >
                         <div className="flex justify-between items-center mb-12">
                             <span className="text-2xl font-bold text-white">Menu</span>

@@ -28,16 +28,16 @@ export default function Hero() {
                 </video>
             </div>
 
-            <div className="relative z-20 mx-auto flex h-full max-w-[1440px] flex-col justify-end items-start px-6 pb-[40px]">
+            <div className="relative z-20 mx-auto flex h-full max-w-[1440px] flex-col justify-end items-start px-6 pb-20 md:pb-[40px]">
                 <WordFadeIn
                     words="Автомашины"
-                    className="text-5xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left text-white"
+                    className="text-4xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left text-white"
                     delay={0}
                 />
 
                 <WordFadeIn
                     words="хамгаалалтын төгс шийдэл"
-                    className="text-5xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left mt-2 text-zinc-400"
+                    className="text-4xl font-medium tracking-tight md:text-7xl lg:text-8xl text-left mt-2 text-zinc-400"
                     delay={0.3}
                 />
 
