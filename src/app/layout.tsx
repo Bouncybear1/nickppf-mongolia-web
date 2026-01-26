@@ -82,7 +82,7 @@ export default function RootLayout({
       <body className="bg-zinc-950 text-white selection:bg-red-500 selection:text-white font-sans overflow-x-hidden">
         <SmoothScroll>
           <Navbar />
-          <main className="min-h-screen w-full relative overflow-x-hidden">
+          <main className="min-h-screen w-full">
             {children}
           </main>
           <Footer />
