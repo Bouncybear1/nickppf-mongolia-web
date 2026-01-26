@@ -37,9 +37,31 @@ const ppNeueMontreal = localFont({
 export const metadata: Metadata = {
   title: {
     default: "NickPPF Mongolia - Автомашины будгийн хамгаалалтын хуулга",
-    template: "%s | NickPPF Mongolia - Автомашины будгийн хамгаалалтын хуулга"
+    template: "%s | NickPPF Mongolia"
   },
   description: "The official distributor of NickPPF in Mongolia. Premium paint protection films and automotive detailing.",
+  openGraph: {
+    title: "NickPPF Mongolia - Автомашины будгийн хамгаалалтын хуулга",
+    description: "The official distributor of NickPPF in Mongolia. Premium paint protection films and automotive detailing.",
+    url: "https://nickppf.mn",
+    siteName: "NickPPF Mongolia",
+    images: [
+      {
+        url: "/paint-protection-film.avif", // Using a high quality image from public
+        width: 1200,
+        height: 630,
+        alt: "NickPPF Mongolia",
+      },
+    ],
+    locale: "mn_MN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NickPPF Mongolia",
+    description: "The official distributor of NickPPF in Mongolia. Premium paint protection films and automotive detailing.",
+    images: ["/paint-protection-film.avif"],
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
