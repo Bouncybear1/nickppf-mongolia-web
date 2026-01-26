@@ -78,8 +78,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${ppNeueMontreal.variable} ${jetbrainsMono.variable} antialiased overflow-x-hidden`}>
-      <body className="bg-zinc-950 text-white selection:bg-red-500 selection:text-white font-sans overflow-x-hidden">
+    <html lang="en" className={`${ppNeueMontreal.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body className="bg-zinc-950 text-white selection:bg-red-500 selection:text-white font-sans">
         <SmoothScroll>
           <Navbar />
           <main className="min-h-screen w-full">
