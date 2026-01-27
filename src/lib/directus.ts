@@ -62,6 +62,11 @@ export interface Testimonial {
   rating: number;
 }
 
+export interface Featured_news {
+  id: number;
+  News_to_feature: number;
+}
+
 /**
  * Helper to fetch file URL from Directus
  */

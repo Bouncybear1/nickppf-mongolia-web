@@ -22,7 +22,7 @@ export default function Hero() {
                     muted
                     playsInline
                     className="h-full w-full object-cover"
-                    poster="/hero-poster.jpg"
+                    poster="/hero-bg.avif"
                 >
                     <source src="/amblpk5xet4w.webm" type="video/webm" />
                 </video>

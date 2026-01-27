@@ -96,13 +96,9 @@ export default function Navbar() {
 
                 {/* Right Section: Auth Buttons */}
                 <div className="flex items-center gap-3">
+
                     <div className="hidden lg:inline-block">
-                        <Button variant="black" className="px-6 py-2.5 text-sm font-medium">
-                            Register
-                        </Button>
-                    </div>
-                    <div className="hidden lg:inline-block">
-                        <Button variant="yellow" className="px-6 py-2.5 text-sm font-bold">
+                        <Button variant="yellow" className="px-6 py-2.5 text-md font-bold">
                             Login
                         </Button>
                     </div>
@@ -144,9 +140,6 @@ export default function Navbar() {
                                 </Link>
                             ))}
                             <div className="mt-8 flex flex-col gap-4">
-                                <Button className="w-full py-4 text-lg font-medium">
-                                    Register
-                                </Button>
                                 <Button className="w-full py-4 text-lg font-bold">
                                     Login
                                 </Button>
