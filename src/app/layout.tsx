@@ -79,7 +79,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${ppNeueMontreal.variable} ${jetbrainsMono.variable} antialiased`}>
-      <body className="bg-zinc-950 text-white selection:bg-red-500 selection:text-white font-sans">
+      <body className="bg-zinc-950 text-white selection:bg-[#F4D23C] selection:text-white font-sans" suppressHydrationWarning>
         <SmoothScroll>
           <Navbar />
           <main className="min-h-screen w-full">

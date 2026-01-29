@@ -1,4 +1,6 @@
 
+
+
 export interface Categories {
   id: number;
   Title: string;
@@ -67,6 +69,39 @@ export interface Featured_news {
   News_to_feature: number;
 }
 
+export interface about_us_content {
+  id: number;
+  company_description: string;
+  mission_statement: string;
+  value: string;
+  highlight_title: string;
+  highlight_description: string;
+  highlight_image: string;
+  highlight_title_2: string;
+  highlight_description_2: string;
+  highlight_image_2: string;
+  highlight_title_3: string;
+  highlight_description_3: string;
+  highlight_image_3: string;
+  company_image: string;
+}
+
+export interface Award {
+  id: number;
+  status: string;
+  sort: number | null;
+  title: string;
+  image: string;
+}
+
+export interface Certificate {
+  id: number;
+  status: string;
+  sort: number | null;
+  title: string;
+  image: string | null;
+}
+
 /**
  * Helper to fetch file URL from Directus
  */
@@ -80,12 +115,6 @@ export function getDirectusFileUrl(fileId: string | number) {
  */
 export async function fetchDirectus(collection: string, query?: Record<string, string>) {
   const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055';
-  // If using a proxy, change this to your internal API route
-  // const BASE_URL = '/api/directus'; 
-
-  // For now, simpler direct fetch from client or server component
-  // In production, you might want to proxy to hide tokens if reading private data
-  // But public data is fine.
 
   const url = new URL(`${DIRECTUS_URL}/items/${collection}`);
   if (query) {
@@ -108,6 +137,7 @@ export async function fetchDirectus(collection: string, query?: Record<string, s
     return json.data;
   } catch (error) {
     console.error('Directus Fetch Error:', error);
+
     return [];
   }
 }
