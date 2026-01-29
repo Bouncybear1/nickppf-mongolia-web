@@ -46,6 +46,7 @@ export interface Article {
   content: string;
   date_created: string;
   Featured_image: string;
+  topic?: any; // Temporarily loose typing to handle potential polymorphic structure { key: Model, collection: string }
 }
 
 export interface SiteSettings {

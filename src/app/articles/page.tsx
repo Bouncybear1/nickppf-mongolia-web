@@ -6,6 +6,13 @@ import Link from "next/link";
 import { fetchDirectus, getDirectusFileUrl, type Article, type Featured_news } from "@/lib/directus";
 import { Calendar, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SectionSubtitle } from "@/components/ui/SectionSubtitle";
+
+interface Topic {
+    id: number;
+    title: string;
+    slug: string;
+}
 
 // Note: Metadata should be in a separate layout.tsx or moved to Server Component wrapper
 // For now, this is a client component due to interactive ToC
@@ -26,6 +33,7 @@ export default function ArticlesPage() {
     const [featuredArticle, setFeaturedArticle] = useState<Article | null>(null);
     const [recentPosts, setRecentPosts] = useState<Article[]>([]);
     const [groupedArticles, setGroupedArticles] = useState<GroupedArticles[]>([]);
+    const [topics, setTopics] = useState<Topic[]>([]);
     const [activeSection, setActiveSection] = useState<string>("");
     const [loading, setLoading] = useState(true);
 
@@ -68,6 +76,12 @@ export default function ArticlesPage() {
                     const grouped = groupArticlesByMonth(remaining);
                     setGroupedArticles(grouped);
                 }
+
+                // Fetch topics
+                const topicsData = await fetchDirectus('news_topic') as Topic[];
+                if (Array.isArray(topicsData)) {
+                    setTopics(topicsData);
+                }
             } catch (error) {
                 console.error("Failed to load articles", error);
             } finally {
@@ -107,32 +121,24 @@ export default function ArticlesPage() {
             {/* Hero Header */}
             <section className="pt-32 pb-16 px-6">
                 <div className="mx-auto max-w-[1440px]">
-                    <h1 className="text-4xl font-medium tracking-tight md:text-7xl lg:text-8xl">
+                    <h1 className="border-b border-zinc-800 pb-4 text-4xl font-medium tracking-tight md:text-5xl lg:text-6xl">
                         Мэдээ, мэдээлэл
                     </h1>
-                    <p className="mt-4 text-lg text-zinc-400 max-w-[65ch]">
-                        NICK PPF Mongolia-ийн сүүлийн үеийн мэдээ, шинэ бүтээгдэхүүн болон үйлчилгээний талаарх мэдээллүүд
-                    </p>
                 </div>
             </section>
 
-            {/* Featured Article */}
-            {featuredArticle && (
+            {/* Articles Grid */}
+            {(featuredArticle || recentPosts.length > 0) && (
                 <section className="px-6 pb-24">
                     <div className="mx-auto max-w-[1440px]">
-                        <FeaturedArticleCard article={featuredArticle} />
-                    </div>
-                </section>
-            )}
-
-            {/* Recent Posts Grid */}
-            {recentPosts.length > 0 && (
-                <section className="px-6 pb-24">
-                    <div className="mx-auto max-w-[1440px]">
-                        <h2 className="text-3xl font-medium md:text-5xl mb-12">Сүүлийн нийтлэлүүд</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {featuredArticle && (
+                                <div className="md:col-span-2 md:row-span-2">
+                                    <FeaturedArticleCard article={featuredArticle} topics={topics} />
+                                </div>
+                            )}
                             {recentPosts.map((article, idx) => (
-                                <ArticleCard key={article.id} article={article} index={idx} />
+                                <ArticleCard key={article.id} article={article} index={idx} topics={topics} />
                             ))}
                         </div>
                     </div>
@@ -193,7 +199,9 @@ export default function ArticlesPage() {
     );
 }
 
-function FeaturedArticleCard({ article }: { article: Article }) {
+function FeaturedArticleCard({ article, topics }: { article: Article; topics: Topic[] }) {
+    const topic = article.topic ? topics.find(t => t.id === article.topic.key) : null;
+
     return (
         <Link href={`/articles/${article.slug}`}>
             <motion.div
@@ -212,10 +220,16 @@ function FeaturedArticleCard({ article }: { article: Article }) {
 
                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
                     <div className="flex items-center gap-2 text-[#F4D23C] text-sm mb-4">
-                        <Calendar size={16} />
-                        <time>{new Date(article.date_created).toLocaleDateString('mn-MN')}</time>
+                        <SectionSubtitle>
+                            <time>{new Date(article.date_created).toLocaleDateString('mn-MN')}</time>
+                        </SectionSubtitle>
+                        {topic && (
+                            <SectionSubtitle>
+                                {topic.title}
+                            </SectionSubtitle>
+                        )}
                     </div>
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-4 max-w-[20ch]">
+                    <h2 className="text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight mb-4 max-w-[20ch]">
                         {article.title}
                     </h2>
                     {article.excerpt && (
@@ -223,17 +237,16 @@ function FeaturedArticleCard({ article }: { article: Article }) {
                             {article.excerpt}
                         </p>
                     )}
-                    <div className="mt-6 inline-flex items-center gap-2 text-white group-hover:gap-4 transition-all">
-                        <span>Унших</span>
-                        <ArrowRight size={20} />
-                    </div>
+
                 </div>
             </motion.div>
         </Link>
     );
 }
 
-function ArticleCard({ article, index }: { article: Article; index: number }) {
+function ArticleCard({ article, index, topics }: { article: Article; index: number; topics: Topic[] }) {
+    const topic = article.topic ? topics.find(t => t.id === article.topic.key) : null;
+
     return (
         <Link href={`/articles/${article.slug}`}>
             <motion.div
@@ -241,29 +254,29 @@ function ArticleCard({ article, index }: { article: Article; index: number }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="group"
+                className="group relative aspect-[4/3] overflow-hidden rounded-lg bg-zinc-900"
             >
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-4 bg-zinc-900">
-                    {article.Featured_image && (
-                        <img
-                            src={getDirectusFileUrl(article.Featured_image)}
-                            alt={article.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                    )}
-                </div>
-                <div className="flex items-center gap-2 text-zinc-500 text-xs mb-2">
-                    <Calendar size={14} />
-                    <time>{new Date(article.date_created).toLocaleDateString('mn-MN')}</time>
-                </div>
-                <h3 className="text-lg font-medium mb-2 group-hover:text-zinc-300 transition-colors line-clamp-2">
-                    {article.title}
-                </h3>
-                {article.excerpt && (
-                    <p className="text-sm text-zinc-400 line-clamp-2 max-w-[65ch]">
-                        {article.excerpt}
-                    </p>
+                {article.Featured_image && (
+                    <img
+                        src={getDirectusFileUrl(article.Featured_image)}
+                        alt={article.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
                 )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="flex items-center gap-2">
+                        <SectionSubtitle>{new Date(article.date_created).toLocaleDateString('mn-MN')}</SectionSubtitle>
+                        {topic && (
+                            <>
+                                <SectionSubtitle className="uppercase tracking-widest">{topic.title}</SectionSubtitle>
+                            </>
+                        )}
+                    </div><h3 className="text-lg font-medium text-white group-hover:text-zinc-200 transition-colors line-clamp-2">
+                        {article.title}
+                    </h3>
+                </div>
             </motion.div>
         </Link>
     );
