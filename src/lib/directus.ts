@@ -117,7 +117,12 @@ export function getDirectusFileUrl(fileId: string | number) {
 export async function fetchDirectus(collection: string, query?: Record<string, string>) {
   const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055';
 
-  const url = new URL(`${DIRECTUS_URL}/items/${collection}`);
+  let endpoint = `/items/${collection}`;
+  if (collection === 'users' || collection === 'directus_users') endpoint = '/users';
+  if (collection === 'roles' || collection === 'directus_roles') endpoint = '/roles';
+  if (collection === 'files' || collection === 'directus_files') endpoint = '/files';
+
+  const url = new URL(`${DIRECTUS_URL}${endpoint}`);
   if (query) {
     Object.entries(query).forEach(([key, value]) => {
       url.searchParams.append(key, value);
@@ -129,10 +134,15 @@ export async function fetchDirectus(collection: string, query?: Record<string, s
       next: { revalidate: 60 }, // Cache for 60s
       headers: {
         'Content-Type': 'application/json',
+        ...(process.env.DIRECTUS_API_TOKEN ? { 'Authorization': `Bearer ${process.env.DIRECTUS_API_TOKEN}` } : {})
       }
     });
 
-    if (!res.ok) throw new Error(`Failed to fetch ${collection}`);
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(`Directus Fetch Failed [${collection}]: ${res.status} ${res.statusText}`, text);
+      throw new Error(`Failed to fetch ${collection}: ${res.status} ${text}`);
+    }
 
     const json = await res.json();
     return json.data;
@@ -163,5 +173,44 @@ export async function fetchDirectusCount(collection: string) {
   } catch (error) {
     console.error('Directus Count Fetch Error:', error);
     return 0;
+  }
+}
+/**
+ * Create an item in Directus
+ */
+export async function createDirectusItem(collection: string, data: any) {
+  const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055';
+  const DIRECTUS_TOKEN = process.env.DIRECTUS_API_TOKEN; // Ensure this is set in .env.local
+
+  if (!DIRECTUS_TOKEN) {
+    console.error("Directus API Token is missing");
+    throw new Error("Server configuration error");
+  }
+
+  try {
+    let endpoint = `/items/${collection}`;
+    if (collection === 'users' || collection === 'directus_users') endpoint = '/users';
+    if (collection === 'roles' || collection === 'directus_roles') endpoint = '/roles';
+    if (collection === 'files' || collection === 'directus_files') endpoint = '/files';
+
+    const res = await fetch(`${DIRECTUS_URL}${endpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${DIRECTUS_TOKEN}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`Failed to create item in ${collection}: ${JSON.stringify(errorData)}`);
+    }
+
+    const json = await res.json();
+    return json.data;
+  } catch (error) {
+    console.error('Directus Create Error:', error);
+    throw error;
   }
 }

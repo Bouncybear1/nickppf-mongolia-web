@@ -3,29 +3,29 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { SectionSubtitle } from "@/components/ui/SectionSubtitle";
-import { ShieldCheck, Globe, Trophy, Headset } from "lucide-react";
 
 // Feature Cards Data
 const features = [
     {
-        icon: ShieldCheck,
-        title: "Premium Quality",
-        description: "Our films are engineered with the highest grade materials for unmatched durability and clarity."
+        image: "/images/about/rhino-logo.png",
+        title: "EST. 1999",
+        description: "27 жилийн турш хуримтлуулсан түүх, баталгаатай туршлага"
     },
     {
-        icon: Globe,
-        title: "Global Network",
-        description: "With over 4,000 installation centers worldwide, consistent quality is guaranteed wherever you go."
+        image: "/images/about/globe-logo.png",
+        title: "20 Сая",
+        description: "Өндөр гүйцэтгэлтэй 26 төрлийн автомашины хуулга, 20 сая автомашин"
+
     },
     {
-        icon: Trophy,
-        title: "Industry Leader",
-        description: "Over 25 years of innovation and 20 million+ vehicles protected globally."
+        image: "/images/about/factory-logo.png",
+        title: "4000+",
+        description: "БНХАУ-д 4,000+ албан ёсны суурилуулалтын төв"
     },
     {
-        icon: Headset,
-        title: "Expert Support",
-        description: "Our dedicated team enhances ownership experience with 24/7 technical and customer support."
+        image: "/images/about/certificate-logo.png",
+        title: "300+",
+        description: "Өндөр зэрэглэлийн флагшип дэлгүүр"
     }
 ];
 
@@ -97,9 +97,16 @@ export default function AboutUs() {
                             <div className="absolute top-[-30px] left-[-11px] w-[110px] h-[64px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(50%_50%_at_50%_50%,#F4D23C_0%,rgba(244,210,60,0)_100%)] blur-[12px] pointer-events-none" />
                             <div className="absolute top-0 left-6 w-[40px] h-[4px] bg-[#2A2A2A] rounded-bl-[3px] rounded-br-[3px] transition-colors duration-500 group-hover:bg-[#F4D23C]" />
 
-                            <feature.icon className="relative z-10 h-8 w-8 text-[#F6BE00] mb-4" />
-                            <h3 className="relative z-10 text-xl font-bold text-white mb-2">{feature.title}</h3>
-                            <p className="relative z-10 text-sm text-zinc-400 leading-relaxed">
+                            <div className="relative z-10 w-12 h-12 mb-4">
+                                <img
+                                    src={feature.image}
+                                    alt={feature.title}
+                                    className="w-full h-full object-contain"
+                                />
+                            </div>
+
+                            <h3 className="relative z-10 text-[2rem] tracking-[-0.01em] leading-[1.2] font-medium text-white mb-2">{feature.title}</h3>
+                            <p className="relative z-10 text-base tracking-[0.04em] leading-[1.2] font-book text-white/80">
                                 {feature.description}
                             </p>
                         </motion.div>
