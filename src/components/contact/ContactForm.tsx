@@ -10,12 +10,19 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ categories = [] }: ContactFormProps) {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        name: string;
+        email: string;
+        phone: string;
+        vin: string;
+        services: string[];
+        message: string;
+    }>({
         name: "",
         email: "",
         phone: "",
-        vin: "",
-        service: "",
+        vin: "", // Kept in state but removed from UI
+        services: [],
         message: "",
     });
 
@@ -23,6 +30,12 @@ export default function ContactForm({ categories = [] }: ContactFormProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (formData.services.length === 0) {
+            alert("Please select at least one service.");
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -41,7 +54,7 @@ export default function ContactForm({ categories = [] }: ContactFormProps) {
                     email: "",
                     phone: "",
                     vin: "",
-                    service: "",
+                    services: [],
                     message: "",
                 });
             } else {
@@ -56,10 +69,21 @@ export default function ContactForm({ categories = [] }: ContactFormProps) {
     };
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const toggleService = (serviceTitle: string) => {
+        setFormData((prev) => {
+            const exists = prev.services.includes(serviceTitle);
+            if (exists) {
+                return { ...prev, services: prev.services.filter((s) => s !== serviceTitle) };
+            } else {
+                return { ...prev, services: [...prev.services, serviceTitle] };
+            }
+        });
     };
 
     const inputStyles =
@@ -70,26 +94,26 @@ export default function ContactForm({ categories = [] }: ContactFormProps) {
             <div>
                 <SectionSubtitle>Get in Touch</SectionSubtitle>
                 <h2 className="text-4xl md:text-5xl font-medium text-white mb-6">
-                    Let's discuss your project
+                    NickPPF захиалга өгөх
                 </h2>
-                <p className="text-neutral-400 max-w-md">
-                    Fill out the form below and our team will get back to you shortly to discuss how we can protect your vehicle.
+                <p className="text-neutral-400 ">
+                    Таны захиалгын дагуу манай ажилтан холбогдож, баталгаажуулах болно.
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                {/* Personal Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                {/* Personal Info - 3 Column Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div className="flex flex-col gap-2">
                         <label htmlFor="name" className="text-sm text-neutral-400">
-                            Full Name
+                            Овог нэр
                         </label>
                         <input
                             type="text"
                             id="name"
                             name="name"
                             required
-                            placeholder="Болд Батаа"
+                            placeholder="Болдоо Батаа"
                             value={formData.name}
                             onChange={handleChange}
                             className={inputStyles}
@@ -97,81 +121,100 @@ export default function ContactForm({ categories = [] }: ContactFormProps) {
                     </div>
                     <div className="flex flex-col gap-2">
                         <label htmlFor="email" className="text-sm text-neutral-400">
-                            Email Address
+                            Имэйл хаяг
                         </label>
                         <input
                             type="email"
                             id="email"
                             name="email"
                             required
-                            placeholder="boldoo@example.com"
+                            placeholder="boldoo@gmail.com"
                             value={formData.email}
                             onChange={handleChange}
                             className={inputStyles}
                         />
                     </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="flex flex-col gap-2">
                         <label htmlFor="phone" className="text-sm text-neutral-400">
-                            Phone Number
+                            Утасны дугаар
                         </label>
                         <input
                             type="tel"
                             id="phone"
                             name="phone"
                             required
-                            placeholder="+976 9911-XXXX"
+                            placeholder="9911-XXXX"
                             value={formData.phone}
-                            onChange={handleChange}
-                            className={inputStyles}
-                        />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <label htmlFor="vin" className="text-sm text-neutral-400">
-                            VIN (Арлын дугаар)
-                        </label>
-                        <input
-                            type="text"
-                            id="vin"
-                            name="vin"
-                            required
-                            placeholder="Vehicle Identification Number"
-                            value={formData.vin}
                             onChange={handleChange}
                             className={inputStyles}
                         />
                     </div>
                 </div>
 
+                {/* Service Selection - Grid of Cards */}
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="service" className="text-sm text-neutral-400">
-                        Service Interested In
+                    <label className="text-sm text-neutral-400 flex justify-between items-center">
+                        Үйлчилгээ сонгох
+                        {formData.services.length > 0 && (
+                            <span className="text-[#F4D23C] text-xs font-medium bg-[#F4D23C]/10 px-2 py-0.5 rounded-full">
+                                {formData.services.length} Selected
+                            </span>
+                        )}
                     </label>
-                    <div className="relative">
-                        <select
-                            id="service"
-                            name="service"
-                            required
-                            value={formData.service}
-                            onChange={handleChange}
-                            className={cn(inputStyles, "appearance-none cursor-pointer")}
-                        >
-                            <option value="" disabled className="bg-zinc-900 text-neutral-500">
-                                Select a service
-                            </option>
-                            {categories.map((cat: any) => (
-                                <option key={cat.id} value={cat.Title} className="bg-zinc-900">
-                                    {cat.Title}
-                                </option>
-                            ))}
-                        </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2.5 4.5L6 8L9.5 4.5" stroke="#737373" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {categories.map((cat: any) => {
+                            const isSelected = formData.services.includes(cat.Title);
+
+                            return (
+                                <button
+                                    key={cat.id}
+                                    type="button"
+                                    onClick={() => toggleService(cat.Title)}
+                                    className={cn(
+                                        "relative aspect-square rounded-xl overflow-hidden group transition-all duration-300 border border-white/10",
+                                        isSelected
+                                            ? "ring-2 ring-[#F4D23C] ring-offset-2 ring-offset-zinc-950 opacity-100"
+                                            : "opacity-80 hover:opacity-100"
+                                    )}
+                                >
+                                    {/* Background Image */}
+                                    {/* Using standard img tag for simplicity if next/image is tricky with dynamic domains not in config, 
+                                        but preferred next/image. Let's try to use style background or img. */}
+                                    {cat.Featured_image ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img
+                                            src={`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${cat.Featured_image}`}
+                                            alt={cat.Title}
+                                            className={cn(
+                                                "absolute inset-0 w-full h-full object-cover transition-all duration-500",
+                                                isSelected ? "grayscale-0 scale-105" : "grayscale-[60%]"
+                                            )}
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-neutral-800" />
+                                    )}
+
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300" />
+
+                                    {/* Title */}
+                                    <div className="absolute inset-0 flex items-center justify-center p-4">
+                                        <span className="text-white font-medium text-center text-lg md:text-xl drop-shadow-md">
+                                            {cat.Title}
+                                        </span>
+                                    </div>
+
+                                    {/* Checkmark indicator for better UX */}
+                                    {isSelected && (
+                                        <div className="absolute top-3 right-3 bg-[#F4D23C] text-black rounded-full p-1">
+                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                        </div>
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -183,7 +226,7 @@ export default function ContactForm({ categories = [] }: ContactFormProps) {
                         id="message"
                         name="message"
                         rows={4}
-                        placeholder="Tell us about your vehicle..."
+                        placeholder="Та авах үйлчилгээнийхээ тухай дэлгэрэнгүй оруулна уу"
                         value={formData.message}
                         onChange={handleChange}
                         className={cn(inputStyles, "resize-none")}

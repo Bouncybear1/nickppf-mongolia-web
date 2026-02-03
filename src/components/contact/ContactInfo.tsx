@@ -9,7 +9,7 @@ export default function ContactInfo() {
             <div>
                 <SectionSubtitle>Contact Information</SectionSubtitle>
                 <h2 className="text-3xl font-medium text-white mb-6">
-                    Find us in Ulaanbaatar
+                    Бидэнтэй холбогдох
                 </h2>
 
                 <div className="flex flex-col gap-6">
@@ -20,7 +20,7 @@ export default function ContactInfo() {
                         <div>
                             <h3 className="text-white font-medium mb-2 tracking-[0.05rem]">Байршил</h3>
                             <p className="text-neutral-400 tracking-[0.05em]">
-                                СХД-н 13-р хороо, Өнөр төв 2 давхар NICKPPFMongolia
+                                СХД, 13-р хороо, Өнөр төв 2 давхар, NICKPPFMongolia
                             </p>
                         </div>
                     </div>
@@ -32,8 +32,8 @@ export default function ContactInfo() {
                         <div>
                             <h3 className="text-white font-medium mb-1 tracking-[0.05rem]">Утасны дугаар</h3>
                             <p className="text-neutral-400 tracking-[0.05em]">
-                                <a href="tel:+9769911XXXX" className="hover:text-white transition-colors">
-                                    +976 9911 XXXX
+                                <a href="tel:+97699900993" className="hover:text-white transition-colors">
+                                    +976 9990 0993
                                 </a>
                             </p>
                         </div>

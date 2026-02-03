@@ -108,7 +108,7 @@ export default function Navbar() {
                                 className="px-6 py-2.5 text-md font-bold"
                                 onClick={() => setIsLoginOpen(true)}
                             >
-                                Login
+                                Нэвтрэх
                             </Button>
                         </div>
 
@@ -156,7 +156,7 @@ export default function Navbar() {
                                             setIsLoginOpen(true);
                                         }}
                                     >
-                                        Login
+                                        Нэвтрэх
                                     </Button>
                                 </div>
                             </nav>

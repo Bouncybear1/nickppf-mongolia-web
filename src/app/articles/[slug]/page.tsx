@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { fetchDirectus, getDirectusFileUrl, type Article } from "@/lib/directus";
 import { Calendar, User } from "lucide-react";
 import { Metadata } from "next";
+import { SectionSubtitle } from "@/components/ui/SectionSubtitle";
 
 interface ArticlePageProps {
     params: { slug: string };
@@ -72,7 +73,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {/* Article Header */}
             <header className="pt-32 pb-12 px-6">
                 <div className="mx-auto max-w-4xl">
+
                     {/* Breadcrumb */}
+
                     <nav className="mb-8 text-sm text-zinc-500">
                         <a href="/articles" className="hover:text-white transition-colors">
                             Мэдээ, мэдээлэл
@@ -80,42 +83,44 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <span className="mx-2">/</span>
                         <span className="text-white">{article.title}</span>
                     </nav>
-
+                    {/* Featured Image */}
+                    {article.Featured_image && (
+                        <div className="px-6 mb-12 w-full">
+                            <div className="mx-auto max-w-5xl">
+                                <div className="relative aspect-[16/9] rounded-[4px] overflow-hidden bg-zinc-900">
+                                    <img
+                                        src={getDirectusFileUrl(article.Featured_image)}
+                                        alt={article.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     {/* Title */}
-                    <h1 className="text-4xl font-medium tracking-tight md:text-6xl lg:text-7xl mb-6">
+                    <h1 className="text-3xl font-medium tracking-tight md:text-4xl lg:text-5xl mb-6">
                         {article.title}
                     </h1>
 
                     {/* Meta Info */}
                     <div className="flex flex-wrap items-center gap-6 text-zinc-400 text-sm">
                         <div className="flex items-center gap-2">
-                            <Calendar size={16} />
-                            <time dateTime={article.date_created}>
-                                {publishDate.toLocaleDateString('mn-MN', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                })}
-                            </time>
+                            <SectionSubtitle>
+
+                                <time dateTime={article.date_created}>
+                                    {publishDate.toLocaleDateString('mn-MN', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}
+                                </time>
+                            </SectionSubtitle>
                         </div>
                     </div>
                 </div>
             </header>
 
-            {/* Featured Image */}
-            {article.Featured_image && (
-                <div className="px-6 mb-12">
-                    <div className="mx-auto max-w-5xl">
-                        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-zinc-900">
-                            <img
-                                src={getDirectusFileUrl(article.Featured_image)}
-                                alt={article.title}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
+
 
             {/* Article Content */}
             <article className="px-6 pb-24">
@@ -166,6 +171,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         </svg>
                         Бүх нийтлэл рүү буцах
                     </a>
+                </div>
+            </div>
+            <div>
+                <div>
+
                 </div>
             </div>
         </div>

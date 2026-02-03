@@ -5,12 +5,14 @@ import { JWT } from "google-auth-library";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { name, email, phone, vin, service, message } = body;
+        const { name, email, phone, services, message } = body;
 
         // Basic validation
-        if (!name || !phone || !vin || !service) {
+        // Note: VIN is no longer required or expected from frontend to be non-empty,
+        // but services must be an array with at least one item.
+        if (!name || !phone || !services || !Array.isArray(services) || services.length === 0) {
             return NextResponse.json(
-                { error: "Missing required fields" },
+                { error: "Missing required fields or services" },
                 { status: 400 }
             );
         }
@@ -37,20 +39,23 @@ export async function POST(req: NextRequest) {
 
         const sheet = doc.sheetsByIndex[0]; // Assuming the first sheet
 
-        await sheet.addRow({
-            ID: crypto.randomUUID(),
-            Status: "not-verified",
-            "Directus ID": "",
-            Name: name,
-            Email: email,
-            Phone: phone,
-            VIN: vin,
-            Service: service,
-            Message: message,
-            Date: new Date().toISOString(),
-            "Service Date": "",
-            "Warranty End Date": ""
-        });
+        // Loop through each selected service and add a row
+        for (const serviceName of services) {
+            await sheet.addRow({
+                ID: crypto.randomUUID(),
+                Status: "not-verified",
+                "Directus ID": "",
+                Name: name,
+                Email: email,
+                Phone: phone,
+                VIN: "", // Explicitly blank as requested
+                Service: serviceName,
+                Message: message,
+                Date: new Date().toISOString(),
+                "Service Date": "",
+                "Warranty End Date": ""
+            });
+        }
 
         return NextResponse.json({ success: true });
     } catch (error: any) {

@@ -7,6 +7,7 @@ export default function Hero() {
     return (
         <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-black text-white">
             {/* Background Image */}
+
             <div className="absolute inset-0">
                 <img
                     src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070&auto=format&fit=crop"

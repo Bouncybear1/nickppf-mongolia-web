@@ -38,7 +38,7 @@ export default function CTA() {
                     className="mt-10"
                 >
                     <Button
-                        href="/consultation"
+                        href="/contact"
                         variant="yellow"
                         className="text-lg px-8 py-4 font-medium"
                     >
