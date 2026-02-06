@@ -1,5 +1,6 @@
 import { fetchDirectus } from "@/lib/directus";
 import ProductsView from "@/components/products/ProductsView";
+import CTA from "@/components/sections/CTA";
 
 export const metadata = {
     title: "Products | NickPPF Mongolia",
@@ -28,10 +29,13 @@ export default async function ProductsPage() {
     ]);
 
     return (
-        <ProductsView
-            categories={categories || []}
-            subCategories={subCategories || []}
-            products={products || []}
-        />
+        <>
+            <ProductsView
+                categories={categories}
+                subCategories={subCategories}
+                products={products}
+            />
+            <CTA />
+        </>
     );
 }
