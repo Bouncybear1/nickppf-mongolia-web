@@ -21,7 +21,7 @@ export interface Product {
   slug: string;
   description: string;
   Featured_image: number[] | ProductFiles[]; // Directus file ID or Expanded Object
-  sub_category: number;
+  subcategory_id: number;
 }
 
 export interface SubCategories {
@@ -129,17 +129,32 @@ export async function fetchDirectus(collection: string, query?: Record<string, s
     });
   }
 
-  try {
-    const res = await fetch(url.toString(), {
-      next: { revalidate: 60 }, // Cache for 60s
-      headers: {
-        'Content-Type': 'application/json',
-        ...(process.env.DIRECTUS_API_TOKEN ? { 'Authorization': `Bearer ${process.env.DIRECTUS_API_TOKEN}` } : {})
-      }
+  const makeRequest = async (token?: string) => {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return fetch(url.toString(), {
+      next: { revalidate: 60 },
+      headers
     });
+  };
+
+  try {
+    let res = await makeRequest(process.env.DIRECTUS_API_TOKEN);
+
+    // If unauthorized/forbidden and we used a token, retry without token (public access)
+    if ((res.status === 401 || res.status === 403) && process.env.DIRECTUS_API_TOKEN) {
+      console.warn(`Directus Fetch [${collection}] rejected with token (${res.status}). Retrying without token...`);
+      res = await makeRequest(undefined);
+    }
 
     if (!res.ok) {
       const text = await res.text();
+      // Only log as error if it's not a 404/403 that we expect might happen
       console.error(`Directus Fetch Failed [${collection}]: ${res.status} ${res.statusText}`, text);
       throw new Error(`Failed to fetch ${collection}: ${res.status} ${text}`);
     }
@@ -148,7 +163,6 @@ export async function fetchDirectus(collection: string, query?: Record<string, s
     return json.data;
   } catch (error) {
     console.error('Directus Fetch Error:', error);
-
     return [];
   }
 }
