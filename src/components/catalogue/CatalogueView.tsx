@@ -73,7 +73,7 @@ export default function CatalogueView() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            className="group relative flex flex-col w-full aspect-[1/2] overflow-hidden rounded-lg bg-zinc-900 border border-white/5"
+                            className="group relative flex flex-col w-full aspect-[1/2] overflow-hidden rounded-lg"
                         >
                             {/* Image Container - Fills remaining space */}
                             <div className="relative flex-1 w-full overflow-hidden">
@@ -81,7 +81,7 @@ export default function CatalogueView() {
                                     src={item.image}
                                     alt={item.title}
                                     fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-60"
+                                    className="object-cover transition-transform duration-700 opacity-80 group-hover:opacity-60 rounded-lg"
                                 />
 
                                 {/* Gradient Overlay */}
@@ -100,8 +100,8 @@ export default function CatalogueView() {
                             </div>
 
                             {/* Title Section - Fixed at bottom of flex container */}
-                            <div className="w-full p-6 bg-zinc-900 z-10">
-                                <h3 className="text-xl font-medium text-white line-clamp-2 uppercase leading-snug">
+                            <div className="w-full p-6 z-10">
+                                <h3 className="text-lg font-medium text-white line-clamp-2 tracking-[0.02em]">
                                     {item.title}
                                 </h3>
                             </div>
