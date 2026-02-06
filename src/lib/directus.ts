@@ -103,6 +103,16 @@ export interface Certificate {
   image: string | null;
 }
 
+export interface Catalogue {
+  id: number;
+  status: string;
+  sort: number | null;
+  catalogue_image: string; // UUID
+  Title: string;
+  Catalogue_url: string | null;
+  catalogue_file: string | null; // UUID
+}
+
 /**
  * Helper to fetch file URL from Directus
  */
