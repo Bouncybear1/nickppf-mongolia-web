@@ -26,12 +26,20 @@ export default function Navbar() {
         setIsScrolled(latest > 50);
     });
 
+    const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+
     const navLinks = [
         { name: "Нүүр хуудас", href: "/" },
         { name: "Бидний тухай", href: "/about" },
         { name: "Бүтээгдэхүүн", href: "/products" },
         { name: "Нийтлэл", href: "/articles" },
-        { name: "Үйлчилгээ", href: "/services" },
+        {
+            name: "Үйлчилгээ",
+            href: "/services",
+            subItems: [
+                { name: "Каталог", href: "/catalogue" }
+            ]
+        },
         { name: "Холбоо барих", href: "/contact" },
     ];
 
@@ -86,15 +94,47 @@ export default function Navbar() {
                         <div className="h-6 w-px bg-white/20 hidden lg:block" />
 
                         {/* Desktop Nav */}
-                        <nav className="hidden lg:flex items-center gap-1 rounded-xs">
+                        <nav className="hidden lg:flex items-center gap-1 relative">
                             {navLinks.map((link) => (
-                                <Link
+                                <div
                                     key={link.name}
-                                    href={link.href}
-                                    className="rounded-full px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white"
+                                    className="relative group"
+                                    onMouseEnter={() => link.subItems && setHoveredLink(link.name)}
+                                    onMouseLeave={() => setHoveredLink(null)}
                                 >
-                                    {link.name}
-                                </Link>
+                                    <Link
+                                        href={link.href}
+                                        className={cn(
+                                            "block rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10 hover:text-white",
+                                            link.subItems && hoveredLink === link.name ? "text-white bg-white/10" : "text-zinc-300"
+                                        )}
+                                    >
+                                        {link.name}
+                                    </Link>
+
+                                    {/* Dropdown Menu */}
+                                    <AnimatePresence>
+                                        {link.subItems && hoveredLink === link.name && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute mt-3 top-full w-full font-medium rounded-[16px] bg-zinc-900/90 backdrop-blur-md shadow-xl overflow-hidden z-50"
+                                            >
+                                                {link.subItems.map((subItem) => (
+                                                    <Link
+                                                        key={subItem.name}
+                                                        href={subItem.href}
+                                                        className="block border-black px-4 py-2 text-sm text-zinc-300 hover:bg-[#F4D23C] hover:text-black rounded-[16px] transition-colors"
+                                                    >
+                                                        {subItem.name}
+                                                    </Link>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             ))}
                         </nav>
                     </div>

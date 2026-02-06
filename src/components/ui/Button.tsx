@@ -9,10 +9,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: "yellow" | "black";
     href?: string;
     target?: string;
+    icon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant = "yellow", children, href, onClick, target, ...props }, ref) => {
+    ({ className, variant = "yellow", children, href, onClick, target, icon, ...props }, ref) => {
 
         // Base Wrapper: relative for positioning the absolute arrow box
         const wrapperStyles = "group/button relative inline-flex items-center justify-center";
@@ -52,7 +53,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                     "group-hover/button:translate-x-full group-hover/button:opacity-100 group-hover/button:rotate-[45deg]" // hover state: slides right, visible, full size, rotated box
                 )}>
                     {/* Arrow Icon - fills the box implies reasonable size */}
-                    <ArrowUp className="h-6 w-6" /> {/* Icon distinct from box rotation? User said 'arrow... turns 45 deg'. Box rotating rotates arrow. */}
+                    {icon || <ArrowUp className="h-6 w-6" />}
                 </span>
             </>
         );
