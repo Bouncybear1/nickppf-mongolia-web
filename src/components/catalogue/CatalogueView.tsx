@@ -36,7 +36,7 @@ export default function CatalogueView({ items }: CatalogueViewProps) {
 
             {/* Catalogue Grid Section */}
             <div className="max-w-[1600px] mx-auto px-6 mt-20">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {items.map((item, index) => {
                         const fileUrl = item.catalogue_file ? getDirectusFileUrl(item.catalogue_file) : item.Catalogue_url;
                         const isFile = !!item.catalogue_file;
