@@ -238,3 +238,34 @@ export async function createDirectusItem(collection: string, data: any) {
     throw error;
   }
 }
+
+/**
+ * Login to Directus
+ */
+export async function login(identifier: string, password: string) {
+  const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || 'http://localhost:8055';
+
+  try {
+    const res = await fetch(`${DIRECTUS_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: identifier, // Directus uses 'email' field for identifier by default
+        password: password,
+      }),
+    });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+      throw new Error(json.errors?.[0]?.message || 'Login failed');
+    }
+
+    return json.data;
+  } catch (error) {
+    console.error('Directus Login Error:', error);
+    throw error;
+  }
+}
