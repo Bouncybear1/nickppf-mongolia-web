@@ -83,7 +83,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         >
                             {/* Header */}
                             <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
-                                <h2 className="text-xl font-bold text-white">Login</h2>
+                                <h2 className="text-xl font-bold text-white">Нэвтрэх</h2>
                                 <button
                                     onClick={onClose}
                                     className="p-2 text-zinc-400 hover:text-white transition-colors"
@@ -103,7 +103,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium text-zinc-400">
-                                            Phone Number
+                                            Утасны дугаар
                                         </label>
                                         <input
                                             type="tel"
@@ -117,10 +117,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
                                             <label className="text-sm font-medium text-zinc-400">
-                                                Password
+                                                Нууц үг
                                             </label>
                                             <a href="#" className="text-xs text-[#F4D23C] hover:underline">
-                                                Forgot password?
+                                                Нууц үгээ мартсан уу?
                                             </a>
                                         </div>
                                         <input
@@ -141,22 +141,22 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                                         {loading ? (
                                             <>
                                                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                                Logging in...
+                                                Нэвтэрч байна...
                                             </>
                                         ) : (
-                                            "Sign In"
+                                            "Нэвтрэх"
                                         )}
                                     </Button>
                                 </form>
 
                                 <div className="text-center text-sm text-zinc-400 pt-2 border-t border-white/10">
-                                    Don't have an account?{" "}
+                                    Бүртгэлгүй юу?{" "}
                                     <Link
                                         href="/contact"
                                         onClick={onClose}
                                         className="font-medium text-[#F4D23C] hover:underline"
                                     >
-                                        Contact us to Register
+                                        Та биднээс үйлчилгээ авч бүртгэлээ хийлгээрэй..
                                     </Link>
                                 </div>
                             </div>
